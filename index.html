@@ -5,30 +5,36 @@
     <title>Start Stop Fun</title>
   </head>
   <body>
-    <input
-      id="freq"
-      type="range"
-      min="1"
-      max="40"
-      step="0.1"
-      value="0.1"
-    /><label id="CutOff_Display">CutOff</label>
-    <input
-      id="rate"
-      type="range"
-      min="0.125"
-      max="10"
-      step="0.001"
-      value="3"
-    /><label id="Rate_Display">Rate</label>
-    <input
-      id="pitch"
-      type="range"
-      min="20"
-      max="2000"
-      step="0.01"
-      value="440"
-    /><label id="Pitch_Display">Pitch</label>
+    <div>
+      <input
+        id="freq"
+        type="range"
+        min="0.01"
+        max="40"
+        step="0.1"
+        value="0.1"
+      /><label id="CutOff_Display">CutOff</label>
+    </div>
+    <div>
+      <input
+        id="rate"
+        type="range"
+        min="0.125"
+        max="10"
+        step="0.001"
+        value="3"
+      /><label id="Rate_Display">Rate</label>
+    </div>
+    <div>
+      <input
+        id="pitch"
+        type="range"
+        min="20"
+        max="2000"
+        step="0.10"
+        value="55"
+      /><label id="Pitch_Display">Pitch</label>
+    </div>
     <script>
       // 1. Initialize the Audio Context
       const ctx = new AudioContext();
