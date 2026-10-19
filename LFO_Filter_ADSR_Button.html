@@ -43,7 +43,7 @@
         max="40"
         step="0.1"
         value="0.1"
-      /><label id="CutOff_Display2"> LP CutOff</label>
+      /><label id="CutOff_Display2"> HP CutOff</label>
     </div>
     <div>
       <input
@@ -90,7 +90,7 @@
 
       const ctx = new AudioContext();
       const master = new GainNode(ctx);
-      master.gain.value = 0.3;
+      master.gain.value = 0.2;
       master.connect(ctx.destination);
 
       // swell 1
@@ -105,9 +105,9 @@
         adsr.gain.cancelScheduledValues(now);
         adsr.gain.setValueAtTime(adsr.gain.value, now);
 
-        adsr.gain.setValueAtTime(0, now);
-        adsr.gain.exponentialRampToValueAtTime(1, now + 1.5);
-        adsr.gain.exponentialRampToValueAtTime(0.0001, now + 5);
+        adsr.gain.linearRampToValueAtTime(0, now + 0.005);
+        adsr.gain.exponentialRampToValueAtTime(1, now + 0.005 + 1.5);
+        adsr.gain.exponentialRampToValueAtTime(0.0001, now + 0.005 + 1.5 + 3.5);
       };
 
       // swell 2
@@ -122,9 +122,12 @@
         adsr2.gain.cancelScheduledValues(now);
         adsr2.gain.setValueAtTime(adsr2.gain.value, now);
 
-        adsr2.gain.setValueAtTime(0, now);
-        adsr2.gain.exponentialRampToValueAtTime(1, now + 1.5);
-        adsr2.gain.exponentialRampToValueAtTime(0.0001, now + 5);
+        adsr2.gain.linearRampToValueAtTime(0, now + 0.005);
+        adsr2.gain.exponentialRampToValueAtTime(1, now + 0.005 + 1.5);
+        adsr2.gain.exponentialRampToValueAtTime(
+          0.0001,
+          now + 0.005 + 1.5 + 3.5,
+        );
       };
 
       // swell 3
@@ -139,9 +142,12 @@
         adsr3.gain.cancelScheduledValues(now);
         adsr3.gain.setValueAtTime(adsr3.gain.value, now);
 
-        adsr3.gain.setValueAtTime(0, now);
-        adsr3.gain.exponentialRampToValueAtTime(1, now + 1.5);
-        adsr3.gain.exponentialRampToValueAtTime(0.0001, now + 5);
+        adsr3.gain.linearRampToValueAtTime(0, now + 0.005);
+        adsr3.gain.exponentialRampToValueAtTime(1, now + 0.005 + 1.5);
+        adsr3.gain.exponentialRampToValueAtTime(
+          0.0001,
+          now + 0.005 + 1.5 + 3.5,
+        );
       };
 
       // 1
@@ -180,26 +186,26 @@
       const mainOsc2 = new OscillatorNode(ctx);
       mainOsc2.type = "triangle";
 
-      const lpFilter2 = new BiquadFilterNode(ctx);
-      lpFilter2.type = "lowpass";
-      lpFilter2.frequency.value = 800; // Base cutoff frequency
-      lpFilter2.Q = 8; // Add resonance for a more noticeable sweep
+      const hpFilter2 = new BiquadFilterNode(ctx);
+      hpFilter2.type = "highpass";
+      hpFilter2.frequency.value = 1000; // Base cutoff frequency
+      hpFilter2.Q = 5; // Add resonance for a more noticeable sweep
 
       const lfo2 = new OscillatorNode(ctx);
       lfo2.type = "sine";
       lfo2.frequency.value = 4; // Speed of modulation (3 Hz / 3 times per second)
 
       const lfoDepth2 = new GainNode(ctx);
-      lfoDepth2.gain.value = 10000; // Modulates the cutoff by +/- 500Hz (Sweep range: 300Hz to 1300Hz)
+      lfoDepth2.gain.value = 500; // Modulates the cutoff by +/- 500Hz (Sweep range: 300Hz to 1300Hz)
 
       lfo2.connect(lfoDepth2);
-      lfoDepth2.connect(lpFilter2.frequency); // Target the filter's frequency parameter
+      lfoDepth2.connect(hpFilter2.frequency); // Target the filter's frequency parameter
 
       const adsr2 = new GainNode(ctx);
       adsr2.gain.value = 0;
 
-      mainOsc2.connect(lpFilter2);
-      lpFilter2.connect(adsr2);
+      mainOsc2.connect(hpFilter2);
+      hpFilter2.connect(adsr2);
       adsr2.connect(master);
       master.connect(ctx.destination);
 
@@ -213,15 +219,15 @@
 
       const lpFilter3 = new BiquadFilterNode(ctx);
       lpFilter3.type = "lowpass";
-      lpFilter3.frequency.value = 800; // Base cutoff frequency
-      lpFilter3.Q = 8; // Add resonance for a more noticeable sweep
+      lpFilter3.frequency.value = 200; // Base cutoff frequency
+      lpFilter3.Q = 6; // Add resonance for a more noticeable sweep
 
       const lfo3 = new OscillatorNode(ctx);
       lfo3.type = "sine";
       lfo3.frequency.value = 4; // Speed of modulation (3 Hz / 3 times per second)
 
       const lfoDepth3 = new GainNode(ctx);
-      lfoDepth3.gain.value = 10000; // Modulates the cutoff by +/- 500Hz (Sweep range: 300Hz to 1300Hz)
+      lfoDepth3.gain.value = 600; // Modulates the cutoff by +/- 500Hz (Sweep range: 300Hz to 1300Hz)
 
       lfo3.connect(lfoDepth3);
       lfoDepth3.connect(lpFilter3.frequency); // Target the filter's frequency parameter
